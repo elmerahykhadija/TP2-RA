@@ -17,8 +17,6 @@ Le package Vuforia a été importé via l'Asset Store et configuré dans Unity p
 
 ![Installation Vuforia](img/image.png)
 
-### Activation de la licence
-![Activation licence](img/image-2.png)
 
 ## 3. Mise en oeuvre technique
 ### A. Configuration de la scène
