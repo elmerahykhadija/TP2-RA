@@ -13,8 +13,7 @@
 
 ---
 ## Auteurs 
-Khadija EL MERAHY
-Ghizlane AITELHAJ
+Khadija EL MERAHY & Ghizlane AITELHAJ
 ---
 
 ## Vue d'ensemble
