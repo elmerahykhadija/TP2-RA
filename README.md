@@ -142,86 +142,21 @@ Une **Image Target** a été créée et liée à la **base de données Vuforia**
 - **Dimensions physiques** : 7 cm × 12 cm
 - **Qualité de reconnaissance** : Excellente (motifs variés)
 
-#### A.3 Hiérarchie de la scène
-
-```
-Scene
-├── ARCamera
-│   └── ARCameraChild
-├── ImageTarget (target_astronaut_USLetter)
-│   ├── Capsule3D (Objet virtuel enfant)
-│   ├── Canvas (Interface utilisateur)
-│   │   └── TextMeshPro_StatusDisplay
-│   └── GreenFrameIndicator
-└── Lighting Setup
-```
-
 ### B. Contenu virtuel et interface utilisateur
 
-#### B.1 Objet 3D - Capsule virtuelle
+Une **capsule 3D** a été positionnée comme enfant de l'Image Target pour suivre les mouvements en temps réel.
 
-Une **capsule 3D** a été positionnée comme **enfant de l'Image Target**. Cette hiérarchie garantit que :
-- L'objet suit exactement la position et rotation de la cible
-- La transformation se met à jour en temps réel
-- L'effet AR est cohérent et immersif
-
-**Propriétés de la capsule :**
-```
-Transform
-├── Position: (0, 0.5, 0)
-├── Rotation: (0, 0, 0)
-└── Scale: (0.5, 1.5, 0.5)
-
-Material
-├── Color: Cyan luminescent
-└── Shader: Standard (avec émission)
-```
+Un composant **TextMeshPro** affiche les messages d'état et les résultats d'analyse avec gestion dynamique des couleurs.
 
 ![Capsule 3D Rendering](img/image-5.png)
 
-#### B.2 Interface utilisateur - TextMeshPro
-
-Un composant **TextMeshPro** affiche les messages d'état et les résultats de l'analyse :
-
-**Fonctionnalités :**
-- Affichage des phases de détection
-- Messages de progression de l'IA
-- Résultats d'identification avec score de confiance (%)
-- Gestion des erreurs et état "NOT OBSERVED"
-
-**Configuration TextMeshPro :**
-```
-Font Size: 36
-Color: Blanc #FFFFFF
-Alignment: Centré
-Shadow: Noir avec offset (2, -2)
-```
-
 ### C. Système de détection et d'analyse IA
 
-#### C.1 Architecture du script AIObjectDetector
-
-Un script C# personnalisé `AIObjectDetector` gère toute la logique d'interaction AR :
-
-```csharp
-public class AIObjectDetector
-{
-    // Événements Vuforia
-    private ObserverBehaviour targetObserver;
-    
-    // Composants UI
-    private TextMeshProUGUI statusDisplay;
-    private GameObject greenFrameIndicator;
-    
-    // Paramètres d'analyse
-    private float analysisDelaySeconds = 2.5f;
-    private float confidenceScore = 0.98f;
-}
-```
+Un script C# personnalisé gère la logique d'interaction AR via les événements Vuforia.
 
 ![Script IA Architecture](img/image-6.png)
 
-#### C.2 Diagramme de flux de détection
+#### C.1 Diagramme de flux de détection
 
 ```
 ┌─────────────────────┐
@@ -259,47 +194,13 @@ public class AIObjectDetector
 └──────────────────────┘
 ```
 
-#### C.3 États et transitions
+#### C.2 États et transitions
 
-| État | Événement | Action | Prochain État |
-|------|-----------|--------|---------------|
-| **Idle** | Cible détectée | Afficher cadre vert, message "Analyse..." | **Analyzing** |
-| **Analyzing** | Délai écoulé | Afficher résultat "Astronaute identifié (98%)" | **Identified** |
-| **Identified** | Cible perdue | Masquer cadre, clear UI | **Idle** |
-| **Idle/Any** | Cible perdue | Message "NOT OBSERVED" | **Idle** |
-
-#### C.4 Code principal du script
-
-```csharp
-void OnTargetFound()
-{
-    // Activation du cadre de détection
-    greenFrameIndicator.SetActive(true);
-    statusDisplay.text = "Analyse du flux vidéo...";
-    statusDisplay.color = Color.yellow;
-    
-    // Démarrage de la coroutine d'analyse
-    StartCoroutine(AnalyzeObject(analysisDelaySeconds));
-}
-
-void OnTargetLost()
-{
-    greenFrameIndicator.SetActive(false);
-    statusDisplay.text = "NOT OBSERVED";
-    statusDisplay.color = Color.red;
-    
-    // Arrêt de l'analyse en cours
-    StopAllCoroutines();
-}
-
-IEnumerator AnalyzeObject(float delay)
-{
-    yield return new WaitForSeconds(delay);
-    
-    statusDisplay.text = $"Astronaute identifié ({(int)(confidenceScore * 100)}%)";
-    statusDisplay.color = Color.green;
-}
-```
+| État | Événement | Action |
+|------|-----------|--------|
+| **Détection** | Cible trouvée | Afficher cadre vert + message "Analyse..." |
+| **Analyse** | Délai 2.5s | Afficher résultat "Astronaute identifié (98%)" |
+| **Perte** | Cible perdue | Message "NOT OBSERVED" + reset interface |
 
 ---
 
