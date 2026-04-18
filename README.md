@@ -12,6 +12,10 @@
 - [Conclusion](#conclusion)
 
 ---
+## Auteurs 
+Khadija EL MERAHY
+Ghizlane AITELHAJ
+---
 
 ## Vue d'ensemble
 
@@ -25,15 +29,6 @@ Ce projet constitue une démonstration complète d'une **application de réalit�
 - ✅ **Simulation d'inférence IA** avec feedback utilisateur
 - ✅ **Interface utilisateur interactive** avec messages d'état en temps réel
 - ✅ **Gestion robuste des états** de détection/perte de cible
-
----
-
-## Auteurs
-
-| Nom | Rôle |
-|-----|------|
-| **Ghizlane Aitelhaj** | Développement & Architecture |
-| **Khadija El Merahy** | Développement & Intégration |
 
 ---
 
